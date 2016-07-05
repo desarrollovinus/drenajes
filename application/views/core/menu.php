@@ -58,7 +58,29 @@
         </a>
     <?php // } // if ?>
 
+    <!-- Medir -->
+    <a class="item" onClick="javascript:cargar_principal('medir')">
+        <i class="add circle icon"></i>
+        Medir
+    </a>
+
+    <!-- Mediciones anteriores -->
+    <a class="item" onClick="javascript:cargar_principal('mediciones_anteriores')">
+        <i class="browser icon"></i>
+        Mediciones<br> anteriores
+    </a>
+
+    <!-- Obras -->
+    <a class="item" onClick="javascript:cargar_principal('mediciones_anteriores')">
+        <i class="road icon"></i>
+        Obras
+    </a>
+
+
 	
+
+
+
 
 
 

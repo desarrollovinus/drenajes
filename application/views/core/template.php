@@ -103,7 +103,8 @@
 
 		<!-- Librerías -->
         <script src="<?php echo base_url(); ?>js/plugins/bootstrap.min.js"></script>
-        <script src="<?php echo base_url(); ?>semantic-ui/dist/semantic.js"></script>
+		<script src="<?php echo base_url(); ?>semantic/dist/semantic.min.js"></script>
+
         <script src="<?php echo base_url(); ?>js/funciones.js"></script>
 
         <footer>
