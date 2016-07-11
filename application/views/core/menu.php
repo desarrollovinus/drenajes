@@ -71,7 +71,7 @@
     </a>
 
     <!-- Obras -->
-    <a class="item" onClick="javascript:cargar_principal('mediciones_anteriores')">
+    <a class="item" onClick="javascript:cargar_principal('obras')">
         <i class="road icon"></i>
         Obras
     </a>
@@ -94,7 +94,11 @@
     function cargar_principal(tipo){
         // Dependiendo del tipo
         switch(tipo) {
-           
+           	// Obras
+            case "obras":
+                // Se carga la interfaz
+                cargar_interfaz("cont_principal","<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "index"});
+            break; // Obras
         } // switch tipo
 
         // Se quita el menú

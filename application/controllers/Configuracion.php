@@ -5,13 +5,13 @@ date_default_timezone_set('America/Bogota');
 defined('BASEPATH') OR exit('Lo sentimos, usted no tiene acceso a esta ruta');
 
 /**
- * Drenajes - Inicio
+ * Drenajes - Configuración
  * 
  * @author              John Arley Cano Salinas (johnarleycano@hotmail.com)
  * @copyright           Concesión Vías del Nus
  *
  */
-Class Inicio extends CI_Controller {
+Class Configuracion extends CI_Controller {
 	/**
     * Función constructora de la clase. Esta función se encarga de verificar que se haya
     * iniciado sesión. si no se ha iniciado, inmediatamente redirecciona
@@ -38,21 +38,29 @@ Class Inicio extends CI_Controller {
     } // construct
 
 	/**
-	 * Interfaz inicial
-	 * @return void 
-	 */
-	function index()
-	{
-        //se establece el titulo de la pagina
-        $this->data['titulo'] = 'Inicio';
-        //Se establece la vista que tiene el contenido principal
-        $this->data['contenido_principal'] = 'inicio/index';
-        //Se carga la plantilla con las demas variables
-        $this->load->view('core/template', $this->data);
-	} // index
+     * Carga de datos
+     * @return void 
+     */
+    function cargar()
+    {
+        //Se valida que la peticion venga mediante ajax y no mediante el navegador
+        if($this->input->is_ajax_request()){
+        	// Se reciben los datos por POST
+            $tipo = $this->input->post('tipo');
 
-
-
+            // Dependiendo del tipo
+            switch ($tipo) {
+                // Puntos de referencia
+                case 'puntos_referencia':
+                	//Se ejecuta el modelo que carga los datos
+                    print json_encode($this->Configuracion_model->cargar($tipo, $this->input->post('id')));
+                break; // Puntos de referencia
+            } // switch tipo
+        }else{
+            //Si la peticion fue hecha mediante navegador, se redirecciona a la pagina de inicio
+            redirect('');
+        } // if
+    } // cargar
 }
-/* Fin del archivo Inicio.php */
-/* Ubicación: ./application/controllers/Inicio.php */
+/* Fin del archivo Configuracion.php */
+/* Ubicación: ./application/controllers/Configuracion.php */

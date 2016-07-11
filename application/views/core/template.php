@@ -31,16 +31,16 @@
 			<div class="actions">
 				<div class="two fluid ui inverted buttons">
 					<!-- Botón 1 -->
-					<div class="ui red basic inverted button">
+					<!-- <div class="ui red basic inverted button">
 						<i class="remove icon"></i>
 						Cerrar
-					</div>
+					</div> -->
 
 					<!-- Botón 2 -->
-					<div class="ui green basic inverted button">
+					<!-- <div class="ui green basic inverted button">
 						<i class="checkmark icon"></i>
 						De acuerdo
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>

@@ -110,26 +110,26 @@ $db['default'] = array(
 // 	'save_queries' => TRUE
 // );
 
-// // Base de datos hatoapps
-// $db['sicc_operaciones'] = array(
-// 	'dsn'	=> '',
-// 	'hostname' => 'databases',
-// 	'username' => 'root',
-// 	// 'password' => '',
-// 	'password' => 'hat0v1al',
-// 	'database' => 'sicc_operaciones',
-// 	'dbdriver' => 'mysqli',
-// 	'dbprefix' => '',
-// 	'pconnect' => FALSE,
-// 	'db_debug' => TRUE,
-// 	'cache_on' => FALSE,
-// 	'cachedir' => '',
-// 	'char_set' => 'utf8',
-// 	'dbcollat' => 'utf8_general_ci',
-// 	'swap_pre' => '',
-// 	'encrypt' => FALSE,
-// 	'compress' => FALSE,
-// 	'stricton' => FALSE,
-// 	'failover' => array(),
-// 	'save_queries' => TRUE
-// );
+// Base de datos SICC
+$db['db_sicc'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	// 'password' => '',
+	'password' => '',
+	'database' => 'sicc',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => TRUE,
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);

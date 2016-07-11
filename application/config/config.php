@@ -3,14 +3,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
-| Id del Sistema Informático de Contabilización y Control (SICC)
+| Id del Sistema de Gestión de drenajes
 |--------------------------------------------------------------------------
 |
 | El id de la aplicacion es usado para los permisos en la base de datos hatoapps
 | 
 |
 */
-$config['id_aplicacion'] = 13;
+$config['id_aplicacion'] = 9;
+
+/*
+|--------------------------------------------------------------------------
+| Tipo de repositorio
+|--------------------------------------------------------------------------
+|
+| Este tipo lo usaremos para identificar cuando es la aplicación web o local
+|
+*/
+$config['tipo_repositorio'] = "local";
+// $config['tipo_repositorio'] = "web";
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +40,7 @@ $config['id_aplicacion'] = 13;
 |
 */
 $config['base_url'] = 'http://localhost/vinus/drenajes/';
-// $config['base_url'] = 'http://www.hatovial.com/sicc/';
+// $config['base_url'] = 'http://drenajes.vinus.com.co/';
 
 /*
 |--------------------------------------------------------------------------

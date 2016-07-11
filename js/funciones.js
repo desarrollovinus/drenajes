@@ -123,6 +123,9 @@ function cargar_interfaz(contenedor, url, datos)
 	// Configuración de los botones (de esta manera entran desactivados)
 	botones();
 
+	// Se limpia la consola
+	console.clear();
+
 	// Carga de la interfaz
 	$("#" + contenedor).hide().load(url, datos).fadeIn('500');
 } // cargar_interfaz
@@ -269,6 +272,20 @@ function redireccionar(url)
     //Se redirecciona
     location.href = url;
 } // redireccionar
+
+/**
+ * Ingresa los datos a las listas desplegables
+ * @param  {string} 		elemento Nombre del select
+ * @param  {int} array      	Arreglo con datos
+ */
+function rellenar_select(elemento, array)
+{
+	//Se recorren los registros
+    $.each(array.respuesta, function(key, val){
+        //Se agrega cada sede al select
+        $("#" + elemento).append("<option value='" + val.Pk_Id + "'>" + val.Nombre + "</option>");
+    })//Fin each
+} // rellenar_select
 
 /**
  * Permite que todos los checks de una tabla o una lista

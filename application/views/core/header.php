@@ -15,7 +15,6 @@
 <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>semantic/dist/semantic.min.css">
 
-
 <!-- Estilos fechas -->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/datepicker/default.css">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/datepicker/default.date.css">
