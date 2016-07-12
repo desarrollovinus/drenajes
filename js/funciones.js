@@ -39,6 +39,86 @@ function ajax(url, datos, tipo_respuesta)
 } // ajax
 
 /**
+ * Permite procesar una solicitud vía Ajax
+ * @param  {string} tipo Tipo de archivo, para validaciones
+ * @param  {string} url            Url del controlador a donde irá
+ * @return {string o JSON}                Dato que retornará
+ */
+function ajax_archivos(tipo, url){
+	// Declaración de variables
+    var archivos = document.getElementById("archivos");
+    var mensaje;
+
+    // Se recorren los archivos para validaciones
+    for (var i = 0; i < archivos.files.length; ++i) {
+		// Variables
+        var nombre = archivos.files.item(i).name;
+		var nombre_validar = nombre.split(".")[0];
+        var extension = (nombre.substring(nombre.lastIndexOf("."))).toLowerCase();
+
+        // si tiene caracteres especiales
+        if (validar_caracteres(nombre)) {
+        	// Se muestra el modal, enviando título, descripción y nombre de la clase del ícono a usar
+			modal([
+				"Error", 
+				"El archivo " + nombre + " no puede tener tildes ni caracteres especiales como la letra ñ. Cambie el nombre e intente subirlo nuevamente.", 
+				"bug"
+			]);
+            
+            // Se detiene
+            return false;
+        } // if
+
+        // Si el tipo de archivo es foto
+        if(tipo == "fotos"){
+            // Se valida que sea imagen
+            if (!(extension && /^(.jpg|.JPG|.png|.PNG|.gif|.GIF)$/.test(extension))){
+                // Se muestra el modal, enviando título, descripción y nombre de la clase del ícono a usar
+				modal([
+					"Error", 
+					"Una o varias fotos que intenta subir no están en formato JPG, GIF o PNG. Verifique por favor e intente subirlas nuevamente.", 
+					"bug"
+				]);
+
+                return false;
+            } // if
+        } // if
+    } // for
+
+    // Obtenemos los archivos seleccionados en el input
+	var archivo = archivos.files;
+
+    // Creamos una instancia del Objeto FormData.
+    var archivos = new FormData();
+
+    // Recorrido de los archivos
+    for(i = 0; i < archivo.length; i++){
+        // Añadimos cada archivo a el arreglo con un indice direfente
+        archivos.append('archivo' + i, archivo[i]);
+    } // for
+
+    /*Ejecutamos la función ajax de jQuery*/        
+    $.ajax({
+        url: url,
+        async: false,
+        type:'POST', //Metodo que usaremos
+        contentType:false, //Debe estar en false para que pase el objeto sin procesar
+        data: archivos, //Le pasamos el objeto que creamos con los archivos
+        processData:false, //Debe estar en false para que JQuery no procese los datos a enviar
+        cache:false, //Para que el formulario no guarde cache
+        success: function(respuesta){
+            mensaje = respuesta;
+        },
+        error: function(respuesta){
+            mensaje = respuesta;
+        }
+    });
+    
+    // Se retorna el mensaje
+    return mensaje;
+} // ajax_archivos
+
+/**
  * Configuración de los botones que aparecen activos en
  * el menú superior derecho
  * @param  array parametros Arreglo JSON con los botones activos o inactivos
@@ -122,6 +202,9 @@ function cargar_interfaz(contenedor, url, datos)
 {
 	// Configuración de los botones (de esta manera entran desactivados)
 	botones();
+
+	// Se limpia la consola
+	console.clear();
 
 	// Carga de la interfaz
 	$("#" + contenedor).hide().load(url, datos).fadeIn('500');
@@ -271,6 +354,20 @@ function redireccionar(url)
 } // redireccionar
 
 /**
+ * Ingresa los datos a las listas desplegables
+ * @param  {string} 		elemento Nombre del select
+ * @param  {int} array      	Arreglo con datos
+ */
+function rellenar_select(elemento, array)
+{
+	//Se recorren los registros
+    $.each(array.respuesta, function(key, val){
+        //Se agrega cada sede al select
+        $("#" + elemento).append("<option value='" + val.Pk_Id + "'>" + val.Nombre + "</option>");
+    })//Fin each
+} // rellenar_select
+
+/**
  * Permite que todos los checks de una tabla o una lista
  * se seleccionen o deseleccionen
  */
@@ -340,6 +437,19 @@ function validar_campos_obligatorios(campos)
     //Se resetea la variable contadora
     validacion = 0;
 } // validar_campos_obligatorios
+
+/**
+ * Esta función valida los caracteres seleccionados
+ * @return {boolean} true: tiene solo uno; false: tiene varios seleccionados
+ */
+function validar_caracteres(valor)
+{
+    // Si tiene uno de esos valores
+    if (valor.match('[á,é,í,ó,ú]|[Á,É,Í,Ó,Ú]|[ñ,Ñ]')) {
+        // Se retorna falso
+        return true;
+    } // if
+} // validar_caracteres
 
 /**
  * Esta función valida los checks para que tenga solo uno
