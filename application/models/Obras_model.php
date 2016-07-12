@@ -33,6 +33,15 @@ Class Obras_model extends CI_Model{
 	{
 		// Dependiendo del tipo
     	switch ($tipo) {
+    		// Obra
+    		case "obra":
+    			// Consulta
+    			$this->db->where("Pk_Id", $id);
+    			
+    			// Se retorna
+    			return $this->db->get("obras")->row();
+			break; // Obra
+			
 			// Obras
 			case "obras":
 				// Consulta
@@ -43,12 +52,14 @@ Class Obras_model extends CI_Model{
 					o.Abscisa_Final,
 					uf.Codigo AS Unidad_Funcional_Codigo,
 					ot.Nombre AS Tipo,
-					pr.Nombre AS Punto_Referencia
+					pr.Nombre AS Punto_Referencia,
+					l.Nombre AS Lado
 				FROM
 					drenajes.obras AS o
 				LEFT JOIN sicc.puntos_referencia AS pr ON o.Fk_Id_Punto_Referencia = pr.Pk_Id
 				LEFT JOIN sicc.unidades_funcionales AS uf ON pr.Fk_Id_Unidad_Funcional = uf.Pk_Id
 				LEFT JOIN drenajes.obras_tipos AS ot ON o.Fk_Id_Obra_Tipo = ot.Pk_Id
+				LEFT JOIN drenajes.lados AS l ON o.Fk_Id_Lado = l.Pk_Id
 				ORDER BY
 					Unidad_Funcional_Codigo ASC,
 					o.Abscisa_Inicial ASC,

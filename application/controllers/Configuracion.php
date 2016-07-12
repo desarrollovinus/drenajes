@@ -52,9 +52,15 @@ Class Configuracion extends CI_Controller {
             switch ($tipo) {
                 // Puntos de referencia
                 case 'puntos_referencia':
-                	//Se ejecuta el modelo que carga los datos
+                    //Se ejecuta el modelo que carga los datos
                     print json_encode($this->Configuracion_model->cargar($tipo, $this->input->post('id')));
                 break; // Puntos de referencia
+
+                // Lados de una calzada
+                case 'lados':
+                	//Se ejecuta el modelo que carga los datos
+                    print json_encode($this->Configuracion_model->cargar($tipo, $this->input->post('id')));
+                break; // Lados de una calzada
             } // switch tipo
         }else{
             //Si la peticion fue hecha mediante navegador, se redirecciona a la pagina de inicio

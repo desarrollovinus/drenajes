@@ -94,6 +94,12 @@
     function cargar_principal(tipo){
         // Dependiendo del tipo
         switch(tipo) {
+            // Medir
+            case "medir":
+                // Se carga la interfaz
+                cargar_interfaz("cont_principal","<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir"});
+            break; // Medir
+
            	// Obras
             case "obras":
                 // Se carga la interfaz

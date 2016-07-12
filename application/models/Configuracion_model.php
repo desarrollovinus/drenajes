@@ -33,16 +33,25 @@ Class Configuracion_model extends CI_Model{
 	{
 		// Dependiendo del tipo
     	switch ($tipo) {
-			// Unidades funcionales
-			case "unidades_funcionales_activas":
+			// Calzadas
+			case "calzadas":
 				// Consulta
-				$this->db_sicc->select('*');
-				$this->db_sicc->where("Estado", 1);
-				$this->db_sicc->order_by('Codigo');
+				$this->db->select('*');
+				$this->db->order_by('Nombre');
 
 				// Retorno
-		        return $this->db_sicc->get('unidades_funcionales')->result();
-			break; // Unidades funcionales
+		        return $this->db->get('calzadas')->result();
+			break; // Calzadas
+			// Calzadas
+			case "lados":
+				// Consulta
+				$this->db->select('*');
+				$this->db->where('Fk_Id_Calzada', $id);
+				$this->db->order_by('Nombre');
+
+				// Retorno
+		        return $this->db->get('lados')->result();
+			break; // Calzadas
 
 			// Tipos de obras
 			case "obras_tipos":
@@ -77,6 +86,17 @@ Class Configuracion_model extends CI_Model{
 				// Retorno
 		        return $this->db_sicc->get('puntos_referencia')->result();
 			break; // Puntos de referencia
+
+			// Unidades funcionales
+			case "unidades_funcionales_activas":
+				// Consulta
+				$this->db_sicc->select('*');
+				$this->db_sicc->where("Estado", 1);
+				$this->db_sicc->order_by('Codigo');
+
+				// Retorno
+		        return $this->db_sicc->get('unidades_funcionales')->result();
+			break; // Unidades funcionales
 		} // switch
 	} // cargar
 }

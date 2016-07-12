@@ -47,6 +47,15 @@ Class Obras extends CI_Controller {
         if($this->input->is_ajax_request()){
             // Dependiendo del tipo
             switch ($this->input->post('tipo')) {
+                // Subida de foto de la obra
+                case 'foto_crear':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/foto', $this->data);
+                break; // Subida de foto de la obra
+
                 // Index
                 case 'index':
                     // Se carga la vista
@@ -67,6 +76,21 @@ Class Obras extends CI_Controller {
                     // Se carga la vista
                     $this->load->view('obras/listar');
                 break; // Listar obras
+
+                // Medición de obras
+                case 'medir':
+                    // Se carga la vista
+                    $this->load->view('obras/medir/index');
+                break; // Medición de obras
+
+                // Datos generales de la obra
+                case 'medir_datos_generales':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    // $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    // $this->load->view('obras/medir/datos_generales', $this->data);
+                break; // Datos de la obra
 
                 // Unidades de medida aplicables al tipo de obra seleccionado
                 case 'unidades_medida_obra_tipo':

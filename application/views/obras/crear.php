@@ -6,6 +6,9 @@ if ($id != 0) {
 
 	// Input oculto
 	echo '<input id="id_obra" type="hidden" value="'.$id.'">';
+
+	// Foto de la obra
+	$url_foto = base_url()."archivos/obras/{$obra->Foto}";
 } // if
 ?>
 
@@ -46,14 +49,45 @@ if ($id != 0) {
 		<!-- Abscisa inicial -->
 		<div class="field">
 			<label for="input_numero_abscisa_inicial">Abscisa inicial *</label>
-			<input type="text" id="input_numero_abscisa_inicial" value="<?php if(isset($unidad->Abscisa_Inicial)){echo $unidad->Abscisa_Inicial;} ?>" placeholder="Obligatorio">
+			<input type="number" id="input_numero_abscisa_inicial" value="<?php if(isset($unidad->Abscisa_Inicial)){echo $unidad->Abscisa_Inicial;} ?>" placeholder="Obligatorio">
 		</div>
 		
 		<!-- Abscisa final -->
 		<div class="field">
 			<label for="input_numero_abscisa_final">Abscisa final *</label>
-			<input type="text" id="input_numero_abscisa_final" value="<?php if(isset($unidad->Abscisa_Final)){echo $unidad->Abscisa_Final;} ?>" placeholder="Obligatorio">
+			<input type="number" id="input_numero_abscisa_final" value="<?php if(isset($unidad->Abscisa_Final)){echo $unidad->Abscisa_Final;} ?>" placeholder="Obligatorio">
 		</div>
+	</div>
+
+	<div class="four fields">
+		<!-- Calzada -->
+		<div class="field">
+			<label for="select_calzada">Calzada *</label>
+			<select id="select_calzada" class="ui fluid search dropdown">
+				<!-- Option vacío -->
+				<option value="">Obligatorio</option>
+
+				<!-- Recorrido de las calzadas -->
+				<?php foreach ($this->Configuracion_model->cargar("calzadas", NULL) as $calzada) { ?>
+					<option value="<?php echo $calzada->Pk_Id; ?>"><?php echo $calzada->Nombre; ?></option>
+				<?php } // foreach ?>
+			</select>
+		</div>
+
+		<!-- Lado -->
+		<div class="field">
+			<label for="select_lados">Lado *</label>
+			<select id="select_lados" class="ui fluid search dropdown">
+				<!-- Option vacío -->
+				<option value="">Obligatorio</option>
+			</select>
+		</div>
+	</div>
+
+	<!-- Descripción -->
+	<label for="input_descripcion">Descripción</label>
+	<div class="three fields">
+		<textarea rows="3" id="input_descripcion"><?php if(isset($indicador->Descripcion)){echo $indicador->Descripcion;} ?></textarea>
 	</div>
 
 	<!-- Título -->
@@ -78,12 +112,12 @@ if ($id != 0) {
 		<!-- Contenedor para las medidas -->
 		<div id="cont_unidades_medida"></div>
 	</div>
+	
+	<!-- Foto -->
+	<div id="cont_foto"></div>
 
-	<!-- Descripción -->
-	<label for="input_descripcion">Descripción</label>
-	<div class="three fields">
-		<textarea rows="3" id="input_descripcion"><?php if(isset($indicador->Descripcion)){echo $indicador->Descripcion;} ?></textarea>
-	</div>
+	    
+</div>
 </form>
 <!-- Formulario -->
 
@@ -114,6 +148,12 @@ if ($id != 0) {
     		"Cree y/o edite una obra",
     		"checkmark box"
 		]);
+		
+		// Al digitar el ascisado inicial
+		$("#input_numero_abscisa_inicial").on("keyup", function(){
+			// El mismo valor del abscisado inicial se agrega al abscisado final, como apoyo a la digitación
+			$("#input_numero_abscisa_final").val($(this).val());
+		}); // onkeyup
 
 		// Al elegir un tipo de obra
 		$("#select_tipo_obra").on("change", function(){
@@ -123,24 +163,16 @@ if ($id != 0) {
 
 		// Al elegir una unidad funcional
 		$("#select_unidad_funcional").on("change", function(){
-			//Se resetea el select
-    		$("#select_punto_referencia").html('');
+			// Se cargan los puntos de referencia
+			cargar_puntos_referencia();
+		}); // change unidad_funcional
 
-			// Si se selecciona un valor
-            if($(this).val() !== ""){
-            	// Se consultan los puntos de referencia de la unidad funcional
-            	puntos_referencia = ajax("<?php echo site_url('configuracion/cargar'); ?>", {"tipo": "puntos_referencia", "id": $(this).val()}, "JSON");
+		// Al elegir una calzada
+		$("#select_calzada").on("change", function(){
+			// Se cargan los lados de la calzada
+			cargar_lados();
+		}); // change calzada
 
-            	// Se rellena el select
-            	rellenar_select("select_punto_referencia", puntos_referencia);
-            } // if
-		});
-
-		// Al digitar el ascisado inicial
-		$("#input_numero_abscisa_inicial").on("keyup", function(){
-			imprimir("ok")
-			// El mismo valor del abscisado inicial se agrega al abscisado final, como apoyo a la digitación
-			$("#input_numero_abscisa_final").val($(this).val());
-		}); // onkeyup
+		
 	}); // document.ready
 </script>
