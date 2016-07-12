@@ -9,11 +9,10 @@
 				<th class="text-center">Nro.</th>
 				<th class="text-center">Unidad funcional</th>
 				<th class="text-center">Punto de referencia</th>
-				<th class="text-center">Abscisa inicial</th>
-				<th class="text-center">Abscisa final</th>
+				<th class="text-center">Abscisa inicial (ms)</th>
+				<th class="text-center">Abscisa final (ms)</th>
+				<th class="text-center">Lado</th>
 				<th class="text-center">Tipo</th>
-				
-				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -30,6 +29,7 @@
 					<td><?php echo $obra->Punto_Referencia; ?></td>
 					<td><?php echo $obra->Abscisa_Inicial; ?></td>
 					<td><?php echo $obra->Abscisa_Final; ?></td>
+					<td><?php echo $obra->Lado; ?></td>
 					<td><?php echo $obra->Tipo; ?></td>
 					
 				</tr>

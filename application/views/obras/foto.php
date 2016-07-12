@@ -51,6 +51,13 @@ if (isset($url_foto) && file_exists($url_foto)) {
         	// Se sube el anexo
             archivo = ajax_archivos("fotos", "<?php echo site_url('subir/foto_obra" + "/" + id_obra + "'); ?>");
 
+            // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+	        mostrar_mensaje_pie([
+	        	"carga", 
+	        	"Subiendo foto...", 
+	        	"Subiendo foto y asociándola a la obra creada. Por favor espere..."
+	    	]);
+
             // Si existe el archivo
             if (archivo == "existe") {
                 // Se muestra el modal, enviando título, descripción y nombre de la clase del ícono a usar
@@ -66,7 +73,7 @@ if (isset($url_foto) && file_exists($url_foto)) {
             // Si se subió la foto
             if (archivo) {
             	// Se redirecciona al formulario de subida de foto
-    			subir_foto(id_obra);
+    			subir_foto(id_obra, "La foto se subió correctamente.");
             } // if
         }); // input change
    	}); // document.ready

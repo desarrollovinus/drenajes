@@ -222,7 +222,7 @@
 				mensaje, 
 				"checkmark circle"
 			]);
-    	};
+    	} // if
 
     	// Carga de interfaz
 		cargar_interfaz("cont_obras", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "index_listar"});
@@ -232,7 +232,7 @@
 	 * Carga de formulario de subida
 	 * de la foto de la obra
 	 */
-	function subir_foto(id_obra)
+	function subir_foto(id_obra, mensaje = null)
 	{
 		// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
         mostrar_mensaje_pie([
@@ -241,6 +241,16 @@
     		"Esperando que se seleccione la foto para la obra.",
     		"checkmark"
     	]);
+
+    	// Si trae un mensaje
+    	if (mensaje) {
+    		// Se muestra el modal, enviando título, descripción y nombre de la clase del ícono a usar
+			modal([
+				"Foto subida", 
+				mensaje, 
+				"checkmark circle"
+			]);
+    	} // if
 
     	// Carga de interfaz
 		cargar_interfaz("cont_obras", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "foto_crear", "id": id_obra});
