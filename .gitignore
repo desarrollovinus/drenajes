@@ -24,3 +24,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-workspace
 *.sublime-project
 *.jshintrc
+#--------------------------
+archivos/*
+ci_sessions/*
