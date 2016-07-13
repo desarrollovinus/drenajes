@@ -45,6 +45,27 @@
         <a id="icono_pdf" class="item" onClick="javascript:generar_reporte('pdf');" data-content="Generar PDF" data-variation="inverted">
             <i class="file pdf outline icon"></i>
         </a>
+
+        <!-- Anterior -->
+        <a id="icono_anterior" class="item" onClick="javascript:siguiente('izquierda');" data-content="Obra anterior" data-variation="inverted">
+            <i class="chevron left icon"></i>
+        </a>
+
+        <!-- Siguiente -->
+        <a id="icono_siguiente" class="item" onClick="javascript:siguiente('derecha');" data-content="Siguiente obra" data-variation="inverted">
+            <i class="chevron right icon"></i>
+        </a>
+
+        <!-- Medir -->
+        <a id="icono_medir" class="item" onClick="javascript:medir_obra('encole');" data-content="Iniciar medición" data-variation="inverted">
+            <i class="dashboard icon"></i>
+        </a>
+
+        <!-- Continuar medición -->
+        <a id="icono_continuar" class="item" onClick="javascript:continuar_medicion();" data-content="Continuar medición" data-variation="inverted">
+            <i class="toggle right icon"></i>
+        </a>
+
 	</div><!-- Menú superior derecho -->
 </div>
 

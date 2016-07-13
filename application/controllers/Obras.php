@@ -37,6 +37,37 @@ Class Obras extends CI_Controller {
         // $this->data['permisos'] = $this->session->userdata('Permisos');
     } // construct
 
+    /**
+     * Carga de datos
+     * @return void 
+     */
+    function cargar()
+    {
+        //Se valida que la peticion venga mediante ajax y no mediante el navegador
+        if($this->input->is_ajax_request()){
+            // Se reciben los datos por POST
+            $tipo = $this->input->post('tipo');
+
+            // Dependiendo del tipo
+            switch ($tipo) {
+                // Obra en la que se iniciará la medición
+                case 'obra_inicial_medicion':
+                    //Se ejecuta el modelo que carga los datos
+                    print json_encode($this->Obras_model->cargar($tipo, $this->input->post('datos')));
+                break; // Obra en la que se iniciará la medición
+
+                // Todos los id de las obras
+                case 'obras_id':
+                    //Se ejecuta el modelo que carga los datos
+                    print json_encode($this->Obras_model->cargar($tipo, NULL));
+                break; // Todos los id de las obras
+            } // switch tipo
+        }else{
+            //Si la peticion fue hecha mediante navegador, se redirecciona a la pagina de inicio
+            redirect('');
+        } // if
+    } // cargar
+
 	/**
      * Carga la interfaz según el tipo
      * @return void 
@@ -82,14 +113,60 @@ Class Obras extends CI_Controller {
                     // Se carga la vista
                     $this->load->view('obras/medir/index');
                 break; // Medición de obras
-
-                // Datos generales de la obra
-                case 'medir_datos_generales':
+                
+                // Confirmación de datos
+                case 'medir_obra_confirmacion':
                     // Se recibe por post la variable que define si es un registro nuevo o existente
-                    // $this->data["id"] = $this->input->post("id");
+                    $this->data["id"] = $this->input->post("id");
 
                     // Se carga la vista
-                    // $this->load->view('obras/medir/datos_generales', $this->data);
+                    $this->load->view('obras/medir/obra_confirmacion', $this->data);
+                break; // Confirmación de datos
+
+                // Descole de la obra
+                case 'medir_obra_descole':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_descole', $this->data);
+                break; // Descole de la obra
+
+                // Fotos del descole de la obra
+                case 'medir_obra_descole_fotos':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_descole_fotos', $this->data);
+                break; // Fotos del descole de la obra
+
+                // Encole de la obra
+                case 'medir_obra_encole':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_encole', $this->data);
+                break; // Encole de la obra
+
+                // Fotos del encole generales de la obra
+                case 'medir_obra_encole_fotos':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_encole_fotos', $this->data);
+                break; // Fotos del encole de la obra
+
+                // Datos generales de la obra
+                case 'medir_obra_inicial':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+                    $this->data["limite"] = $this->input->post("limite");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_inicial', $this->data);
                 break; // Datos de la obra
 
                 // Unidades de medida aplicables al tipo de obra seleccionado

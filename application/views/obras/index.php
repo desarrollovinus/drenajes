@@ -3,45 +3,6 @@
 
 <script type="text/javascript">
 	/**
-	 * Función que carga los lados de una calzada
-	 * @return void 
-	 */
-	function cargar_lados()
-	{
-		//Se resetea el select
-		$("#select_lados").html('');
-
-		// Si se selecciona un valor
-	    if($("#select_calzada").val() !== ""){
-	    	// Se consultan los lados de la calzada
-	    	lados = ajax("<?php echo site_url('configuracion/cargar'); ?> ", {"tipo": "lados", "id": $("#select_calzada").val()}, "JSON");
-
-	   		// Se rellena el select
-			rellenar_select("select_lados", lados);
-	    } // if
-	} // cargar_lados
-
-	/**
-	 * Función que carga los puntos de referencia
-	 * de una unidad funcional
-	 * @return void 
-	 */
-	function cargar_puntos_referencia()
-	{
-		//Se resetea el select
-		$("#select_punto_referencia").html('');
-
-		// Si se selecciona un valor
-	    if($("#select_unidad_funcional").val() !== ""){
-	    	// Se consultan los puntos de referencia de la unidad funcional
-	    	puntos_referencia = ajax("<?php echo site_url('configuracion/cargar'); ?> ", {"tipo": "puntos_referencia", "id": $("#select_unidad_funcional").val()}, "JSON");
-
-	   		// Se rellena el select
-			rellenar_select("select_punto_referencia", puntos_referencia);
-	    } // if
-	} // cargar_puntos_referencia
-
-	/**
 	 * Función que se activa al presionar el botón crear del menú
 	 * @return void 
 	 */
@@ -127,6 +88,11 @@
 
 			return false;
         } // if
+
+        // Se consulta la obra, para verificar si existe otra en el mismo abscisado y el mismo lado
+
+
+       
 
         // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
         mostrar_mensaje_pie([
