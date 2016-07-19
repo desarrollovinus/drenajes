@@ -53,6 +53,105 @@
 	} // crear
 
 	/**
+	 * Función que se activa al presionar el botón editar del menú
+	 * @return void 
+	 */
+	function editar()
+	{
+
+
+	} // editar
+
+	/**
+	 * Eliminación de registros en base de datos
+	 * @param  {string} tipo tipo a eliminar
+	 * @return {boolean}      true: exitoso
+	 */
+	function eliminar(tipo)
+	{
+
+
+	} // eliminar
+
+	function medir_obra(tipo, id_medicion = null, numero_foto = null)
+	{
+		// id de la obra
+		var id_obra = $("#id_obra").val();
+
+		switch(tipo) {
+			case "confirmacion":
+		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Cargando todos los datos que van a ser almacenados...", 
+		        	"Cargando datos para previa revisión"
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": id_obra});
+	        break;
+
+			case "descole":
+		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Descole de la obra", 
+		        	"Cargando información del descole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val()});
+	        break;
+
+	        case "descole_fotos":
+	        	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Fotos del descole de la obra", 
+		        	"Cargando información de las fotografías del descole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val(), "tipo_medicion": "descole", "numero": numero_foto});
+	        break;
+
+	        // Encole
+		    case "encole":
+		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Encole de la obra", 
+		        	"Cargando información del encole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val()});
+	        break; // Encole
+
+	        // Fotos del encole
+	        case "encole_fotos":
+	        	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Fotos del encole de la obra", 
+		        	"Cargando información de las fotografías del encole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val(), "tipo_medicion": "encole", "numero": numero_foto});
+	        break; // Fotos del encole
+		} // suiche
+	}
+
+	/**
+	 * Gestiona el registro del formulario vía ajax
+	 */
+	function guardar()
+	{
+		regresar();
+	} // guardar
+
+	/**
 	 * Función que elige la siguiente obra y la carga
 	 * @param  {string} sentido Derecha o izquierda (ascendente o descendiente)
 	 */
@@ -124,108 +223,12 @@
 
 	  	// Se carga la interfaz de obra inicial
 	  	obra_inicial(id_obra_siguiente);
-	} // crear
-
-	/**
-	 * Función que se activa al presionar el botón editar del menú
-	 * @return void 
-	 */
-	function editar()
-	{
-
-
-	} // editar
-
-	/**
-	 * Eliminación de registros en base de datos
-	 * @param  {string} tipo tipo a eliminar
-	 * @return {boolean}      true: exitoso
-	 */
-	function eliminar(tipo)
-	{
-
-
-	} // eliminar
-
-	function medir_obra(tipo)
-	{
-		var id_obra = $("#id_obra").val();
-
-		switch(tipo) {
-			case "confirmacion":
-		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
-		        mostrar_mensaje_pie([
-		        	"carga", 
-		        	"Cargando todos los datos que van a ser almacenados...", 
-		        	"Cargando datos para previa revisión"
-		    	]);
-
-		        // Carga de interfaz
-				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": id_obra});
-	        break;
-
-			case "descole":
-		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
-		        mostrar_mensaje_pie([
-		        	"carga", 
-		        	"Descole de la obra", 
-		        	"Cargando información del descole de la obra."
-		    	]);
-
-		        // Carga de interfaz
-				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": id_obra});
-	        break;
-
-	        case "descole_fotos":
-	        	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
-		        mostrar_mensaje_pie([
-		        	"carga", 
-		        	"Fotos del descole de la obra", 
-		        	"Cargando información de las fotografías del descole de la obra."
-		    	]);
-
-		        // Carga de interfaz
-				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": id_obra});
-	        break;
-
-		    case "encole":
-		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
-		        mostrar_mensaje_pie([
-		        	"carga", 
-		        	"Encole de la obra", 
-		        	"Cargando información del encole de la obra."
-		    	]);
-
-		        // Carga de interfaz
-				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": id_obra});
-	        break;
-
-	        case "encole_fotos":
-	        	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
-		        mostrar_mensaje_pie([
-		        	"carga", 
-		        	"Fotos del encole de la obra", 
-		        	"Cargando información de las fotografías del encole de la obra."
-		    	]);
-
-		        // Carga de interfaz
-				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": id_obra});
-	        break;
-		}
-	}
-
-	/**
-	 * Gestiona el registro del formulario vía ajax
-	 */
-	function guardar()
-	{
-		imprimir("fin")
-	} // guardar
+	} // siguiente
 
 	/**
 	 * Interfaz de obra inicial
 	 */
-	function obra_inicial(id_obra, mensaje = null, limite = null)
+	function obra_inicial(id_obra, mensaje = null)
 	{
 		// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
         mostrar_mensaje_pie([
@@ -235,7 +238,7 @@
     	]);
 
     	// Carga de interfaz
-		cargar_interfaz("cont_medir", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_inicial", "id": id_obra, "limite": limite});
+		cargar_interfaz("cont_medir", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_inicial", "id": id_obra});
 	} // obra_inicial
 
 	/**
@@ -244,7 +247,7 @@
 	function volver()
 	{
 		// Carga de interfaz
-		// cargar_interfaz("cont_normas", "<?php // echo site_url('indicadores_configuracion/cargar_interfaz'); ?>", {"tipo": "index"});
+        cargar_interfaz("cont_principal","<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir"});
 	} // volver
 
 	// Cuando el DOM esté listo
@@ -280,8 +283,6 @@
 
 	        	// Si se encontró la obra
 	    		if (obra.respuesta) {
-	    			imprimir("encontrada");
-
 	    			// Se carga la interfaz con la respuesta, sea vacía o el arreglo
     				obra_inicial(obra.respuesta.Pk_Id);
 	    		}else{
@@ -293,8 +294,6 @@
 			    		"bug"
 					]);
 	    		} // if
-
-	    		
     		} // if
 		}); // change
 

@@ -1,5 +1,5 @@
 <h2 class="ui dividing header center aligned azul">
-	Obra inicial
+	Punto de partida
 </h2>
 
 <?php
@@ -17,7 +17,7 @@ $descripcion_foto = $datos_foto[1];
 <!-- Input oculto con el id de la obra -->
 <input id="id_obra" type="hidden" value="<?php echo $id; ?>">
 
-<div class="ui divided items ">
+<div class="ui divided items">
 	<div class="item">
 		<!-- Foto -->
 		<div class="image">
@@ -35,31 +35,42 @@ $descripcion_foto = $datos_foto[1];
 			<div class="description">
 				<p>Última medición: {definir}</p>
 			</div>
-			<div class="extra">
-				<!-- <div class="ui label">IMAX</div> -->
+			<!-- <div class="extra">
 				<div class="ui label">
 					<a onClick="javascript:obra_encole()">
 						<i class="dashboard icon"></i> Iniciar medición
 					</a>
 				</div>
-			</div>
+			</div> -->
 		</div><!-- Contenido -->
 	</div>
-
-	<!-- <div class="extra">
-		<div class="ui right floated primary button" id="btn_derecha" onClick="javascript:siguiente('derecha', '<?php // echo $id; ?>')">
-			Derecha
-			<i class="right chevron icon"></i>
-		</div>
-	
-		<div class="ui left floated primary button" onClick="javascript:siguiente('izquierda', '<?php // echo $id; ?>')">
-			<i class="left chevron icon"></i>
-			Izquierda
-		</div>
-	</div> -->
 </div>
 
 <script type="text/javascript">
+	/**
+	 * Comienza la medición de la obra
+	 */
+	function iniciar_medicion()
+	{
+		// Datos de la medición
+    	datos = {
+    		"Fecha": "<?php echo date('Y-m-d'); ?>",
+    		"Hora_Inicial": "<?php echo date('H:i'); ?>",
+    		"Fk_Id_Obra": $("#id_obra").val()
+    	} // datos
+    	// imprimir(datos);
+
+    	// Esta es la primera parte de la medición. Por ello, aquí se crea el registro de la medición de la obra, y posteriormente se irá
+    	// agregando los datos
+    	medicion = ajax("<?php echo site_url('obras/insertar'); ?>", {"tipo": "medicion", "datos": datos}, "HTML");
+
+    	// Se almacena el id de la medición para que todas las interfaces puedan usarlo
+    	$("#id_medicion").val(medicion.respuesta);
+
+    	// Se llama la función que contiene los formularios de medición
+    	medir_obra("encole", $("#id_medicion").val());
+	} // iniciar_medicion
+
 	// Cuando el DOM esté listo
 	$(document).ready(function(){
 		// Se activan los botones

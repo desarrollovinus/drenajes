@@ -1,20 +1,37 @@
+<?php
+// Se consulta la medición
+$medicion = $this->Obras_model->cargar("medicion", $id);
+?>
+
 <h2 class="ui header center aligned azul">
-	Encole
+	Obstrucción del encole (centímetros)
 	<br>	
 	
 	<center>
-		<div class="ui massive icon input">
-			<input type="number" placeholder="Digite el valor medido">
-			<i class="dashboard icon"></i>
+		<div class="ui massive input">
+			<input type="number" id="input_numero_encole" placeholder="Digite el valor medido" value="<?php echo $medicion->Encole; ?>" autofocus>
 		</div>
 	</center>
 </h2>
 
 <script type="text/javascript">
+	/**
+	 * Almacenamiento de datos de la interfaz
+	 * y continuación la la siguiente
+	 */
 	function continuar_medicion()
 	{
-		medir_obra("encole_fotos");
-	}
+		// Datos de la medición
+    	datos = {
+    		"Encole": $("#input_numero_encole").val()
+    	} // datos
+
+    	// En esta parte, actualizamos los datos del encole de la medición
+    	ajax("<?php echo site_url('obras/actualizar'); ?>", {"tipo": "medicion", "id": $("#id_medicion").val(), "datos": datos}, "HTML");
+
+    	// Se llama la función que contiene los formularios de medición
+		medir_obra("encole_fotos", $("#id_medicion").val(), 1);
+	} // continuar_medicion
 
 	// Cuando el DOM esté listo
 	$(document).ready(function(){

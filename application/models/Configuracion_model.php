@@ -59,7 +59,7 @@ Class Configuracion_model extends CI_Model{
 					$descripcion_foto = "Para cambiar la foto, haga clic en la foto actual, o haga clic en el ícono superior.";
 				} else {
 					// Se carga el logo de Vinus
-					$url_foto = "http://www.vinus.com.co/predios/img/logo_vinus.png";
+					$url_foto = "http://sicc.vinus.com.co/img/Logo_vinus.png";
 
 					// Se carga la descripción por defecto
 					$descripcion_foto = "No hay foto asociada a esta obra. Haga clic en el logo para subir una, o haga clic en el ícono superior para volver al listado de obras.";
@@ -67,6 +67,41 @@ Class Configuracion_model extends CI_Model{
 
 				return array($url_foto, $descripcion_foto); 
 			break; // Datos de la foto de una obra
+
+			// Datos de la foto de una medición
+			case 'datos_foto_medicion':
+				// Se carga el modelo
+				$this->load->model("Obras_model");
+
+				// Nombre del directorio según el tipo
+				($id["Fk_Id_Foto_Tipo"] == 1) ? $tipo = "encoles" : $tipo = "descoles" ;
+
+				// Se consulta los datos de la medición
+				$foto = $this->Obras_model->cargar("medicion_foto", $id);
+
+				// Si no encuentra el registro
+				if($foto){
+					// Ruta de la foto
+					$url_foto = "./archivos/mediciones/{$tipo}/{$foto->Fk_Id_Medicion}/{$foto->Nombre_Archivo}";
+				} else {
+					// Ruta vacía
+					$url_foto = null;
+				} // if
+
+				// Si hay foto
+				if (isset($url_foto) && file_exists($url_foto)) {
+					// Se carga la descripción por defecto
+					$descripcion_foto = "Para cambiar la foto, haga clic 'Subir foto'.";
+				} else {
+					// Se carga el logo de Vinus
+					$url_foto = "http://sicc.vinus.com.co/img/Logo_vinus.png";
+
+					// Se carga la descripción por defecto
+					$descripcion_foto = "No hay foto asociada todavía. Haga clic en 'Subir foto', o haga clic en el ícono superior para volver al listado de obras.";
+				} // if
+
+				return array($url_foto, $descripcion_foto); 
+			break; // Datos de la foto de una medición
 
 			// Lados
 			case "lados":

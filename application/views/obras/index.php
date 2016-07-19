@@ -111,15 +111,15 @@
     		"Fk_Id_Obra_Tipo": tipo_obra.val(),
     		"Fk_Id_Punto_Referencia": punto_referencia.val(),
     	};
-    	imprimir(datos);
+    	// imprimir(datos);
 
     	// Si trae id (registro a actualizar)
     	if (id_obra) {
-    		imprimir("Actualizando...")
+    		imprimir("Actualizando...");
     		// Se procede a modificar
     		// exito = ajax("<?php echo site_url('obras/actualizar'); ?>", {"tipo": "usuario", "datos": datos, "id": id_usuario}, "HTML");
     	} else {
-    		imprimir("Creando...")
+    		imprimir("Creando...");
     		// Se guarda los datos en la base de datos
     		exito = ajax("<?php echo site_url('obras/insertar'); ?>", {"tipo": "obra", "datos": datos}, "HTML");
     	} // if
@@ -144,14 +144,24 @@
 	    	return false;
     	} //if
 
-    	// Se consulta el tipo de obra
+    	// Se eliminan los valores de la obra anteriores
+    	ajax("<?php echo site_url('obras/eliminar'); ?>", {"tipo": "valores", "id_obra": exito.respuesta}, "HTML");
     	
-    	// Se guardan las medidas de esa obra
-    	
 
+    	// Se recorren los inputs
+    	$('input[id^="input_numero_valor"]').each(function() {
+    		// Arreglo de datos a guardar
+    		var datos = {
+    			"Fk_Id_Unidad_Medida": $(this).attr("data-unidad-medida"),
+    			"Fk_Id_Obra": exito.respuesta,
+    			"Valor": $(this).val()
+    		}
+    		// imprimir(datos);
 
-
-
+			// Se guarda el valor
+			valor = ajax("<?php echo site_url('obras/insertar'); ?>", {"tipo": "valores", "datos": datos}, "HTML");
+			imprimir(valor);
+    	}); // each
 
     	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
         mostrar_mensaje_pie([
@@ -162,7 +172,6 @@
 
     	// Se redirecciona al formulario de subida de foto
     	subir_foto(exito.respuesta);
-
 
     	// Se redirecciona a la lista de unidades funcionales
     	// listar("La obra fue creada correctamente");

@@ -24,6 +24,28 @@ Class Obras_model extends CI_Model{
     } // construct
 
     /**
+	 * Permite la actualización de registros existentes en la base de datos
+	 * según el tipo
+	 * @param  string $tipo  Tipo de información
+	 * @param  int $id    Id del registro a actualizar
+	 * @param  array $datos Datos a actualizar
+	 * @return boolean        true: éxito
+	 */
+	function actualizar($tipo, $id, $datos){
+		// Según el tipo
+		switch ($tipo) {
+			// Medición
+			case 'medicion':
+				$this->db->where('Pk_Id', $id);
+		        if($this->db->update('mediciones', $datos)){
+		            //Retorna verdadero
+		            return true;
+		        } // if
+			break; // Medición
+		} // switch
+	} // actualizar
+
+    /**
 	 * Permite la carga de datos o grupo de datos
 	 * @param  string $tipo Tipo
 	 * @param  int $id   Id (cuando lo requiere)
@@ -44,6 +66,33 @@ Class Obras_model extends CI_Model{
     			// Se retorna
     			return $this->db->get("obras")->result();
 			break; // Abscisas iniciales de las obras
+
+			// Medición
+    	    case 'medicion':
+				// Consulta
+				$this->db->where("Pk_Id", $id);
+		        
+				// Retorno
+		        return $this->db->get("mediciones")->row();
+            break; // Medición
+
+			// Medición
+    	    case 'medicion':
+				// Consulta
+				$this->db->where("Pk_Id", $id);
+		        
+				// Retorno
+		        return $this->db->get("mediciones")->row();
+            break; // Medición
+
+			// Datos de la foto de una medición
+    	    case 'medicion_foto':
+				// Consulta
+				$this->db->where($id);
+		        
+				// Retorno
+		        return $this->db->get("mediciones_fotos")->row();
+            break; // Datos de la foto de una medición
 			
 			// Obras
 			case "obras":
@@ -111,6 +160,25 @@ Class Obras_model extends CI_Model{
 		} // switch
 	} // cargar
 
+	/**
+     * Borrado de registros en base de datos
+     * @param  string $tipo Tipo de código que se va a ejecutar
+     * @param  int $id   Id del registro a borrar
+     * @return boolean       true: exitoso
+     */
+    function eliminar($tipo, $id){
+        // Según el tipo
+        switch ($tipo) {
+            // Foto de una medición
+            case "medicion_foto":
+                // Si se borra el registro
+                if($this->db->delete('obras_valores', array('Pk_Id' => $id))){
+					return true;
+				}
+            break; // Foto de una medición
+        } // switch
+    } // eliminar
+
     /**
      * Permite la inserción de datos en la base de datos 
      * @param  string $tipo  Tipo de inserción
@@ -120,6 +188,15 @@ Class Obras_model extends CI_Model{
     function insertar($tipo, $datos)
     {
         switch ($tipo) {
+            // Medición
+            case "medicion":
+                // Si se guarda correctamente
+                if($this->db->insert('mediciones', $datos)){
+                    // Se retorna el id
+                    return $this->db->insert_id();
+                } // if
+            break; // Medición
+
             // Obra
             case "obra":
                 // Si se guarda correctamente
@@ -128,6 +205,15 @@ Class Obras_model extends CI_Model{
                     return $this->db->insert_id();
                 } // if
             break; // Obra
+
+            // Valores de medida de una obra
+            case 'valores':
+                // Si se guarda correctamente
+                if($this->db->insert('obras_valores', $datos)){
+                    // Se retorna el id
+                    return $this->db->insert_id();
+                } // if
+            break; // Valores de medida de una obra
         } // suiche
     } // insertar
 }

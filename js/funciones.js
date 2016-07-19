@@ -126,7 +126,6 @@ function ajax_archivos(tipo, url){
  */
 function botones(parametros)
 {
-	imprimir(parametros)
 	// Se declaran las variables
 	var crear = $("#icono_crear");
 	var editar = $("#icono_editar");
@@ -139,7 +138,8 @@ function botones(parametros)
 	var medir = $("#icono_medir");
 	var anterior = $("#icono_anterior");
 	var siguiente = $("#icono_siguiente");
-	var continuar_medicion = $("#icono_continuar");
+	var continuar_medicion = $("#icono_continuar_medicion");
+	var anterior_medicion = $("#icono_anterior_medicion");
 
 	// Se ocultan todos los íconos por defecto
 	crear.hide();
@@ -154,6 +154,7 @@ function botones(parametros)
 	anterior.hide();
 	siguiente.hide();
 	continuar_medicion.hide();
+	anterior_medicion.hide();
 
 	// Si trae alguna Configuración
 	if (parametros) {
@@ -217,6 +218,11 @@ function botones(parametros)
 			continuar_medicion.show(); 
 			continuar_medicion.popup({inline: true});
 		};
+
+		if (parametros.anterior_medicion) { 
+			anterior_medicion.show(); 
+			anterior_medicion.popup({inline: true});
+		};
 	} // if
 } // botones
 
@@ -229,6 +235,9 @@ function botones(parametros)
  */
 function cargar_interfaz(contenedor, url, datos)
 {
+
+
+
 	// Configuración de los botones (de esta manera entran desactivados)
 	botones();
 

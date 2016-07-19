@@ -16,11 +16,6 @@
             <i class="unhide icon"></i>
         </a>
 
-        <!-- Guardar -->
-        <a id="icono_guardar" class="item" onClick="javascript:guardar();" data-content="Guardar" data-variation="inverted">
-            <i class="save icon"></i>
-        </a>
-
         <!-- Listar -->
         <a id="icono_listar" class="item" onClick="javascript:listar();" data-content="Mostrar todos los registros" data-variation="inverted">
             <i class="table icon"></i>
@@ -48,24 +43,33 @@
 
         <!-- Anterior -->
         <a id="icono_anterior" class="item" onClick="javascript:siguiente('izquierda');" data-content="Obra anterior" data-variation="inverted">
-            <i class="chevron left icon"></i>
+            <i class="arrow left icon"></i>
         </a>
 
         <!-- Siguiente -->
         <a id="icono_siguiente" class="item" onClick="javascript:siguiente('derecha');" data-content="Siguiente obra" data-variation="inverted">
-            <i class="chevron right icon"></i>
+            <i class="arrow right icon"></i>
         </a>
 
         <!-- Medir -->
-        <a id="icono_medir" class="item" onClick="javascript:medir_obra('encole');" data-content="Iniciar medición" data-variation="inverted">
+        <a id="icono_medir" class="item" onClick="javascript:iniciar_medicion();" data-content="Iniciar medición" data-variation="inverted">
             <i class="dashboard icon"></i>
         </a>
 
-        <!-- Continuar medición -->
-        <a id="icono_continuar" class="item" onClick="javascript:continuar_medicion();" data-content="Continuar medición" data-variation="inverted">
-            <i class="toggle right icon"></i>
+        <!-- Regresar medición -->
+        <a id="icono_anterior_medicion" class="item" onClick="javascript:anterior_medicion();" data-content="anterior medición" data-variation="inverted">
+            <i class="chevron left icon"></i>
         </a>
 
+        <!-- Continuar medición -->
+        <a id="icono_continuar_medicion" class="item" onClick="javascript:continuar_medicion();" data-content="Continuar medición" data-variation="inverted">
+            <i class="chevron right icon"></i>
+        </a>
+
+        <!-- Guardar -->
+        <a id="icono_guardar" class="item" onClick="javascript:guardar();" data-content="Guardar" data-variation="inverted">
+            <i class="save icon"></i>
+        </a>
 	</div><!-- Menú superior derecho -->
 </div>
 

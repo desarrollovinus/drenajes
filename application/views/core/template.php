@@ -15,6 +15,9 @@
         <!-- Inputs ocultos que almacenan la url site y base para usarla en funciones javascript -->
         <input id="url_configuracion_cargar" type="hidden" value="<?php echo site_url('configuracion/cargar') ?>">
 
+        <!-- Input oculto con el id de la medición de ua obra. Se ubica aquí para que pueda ser leído por todas las interfaces -->
+		<input type="hidden" id="id_medicion" >
+
 		<!-- Modal Mensaje -->
 		<div id="modal_mensaje" class="ui basic small test modal">
 			<i class="close icon"></i>

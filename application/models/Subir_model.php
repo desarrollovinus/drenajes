@@ -36,6 +36,19 @@ Class Subir_model extends CI_Model{
             return true;
         } // if
     } // foto_obra
+
+    /**
+     * Foto de una medición
+     * @param  array $datos Datos de la foto
+     * @return true        exito o error
+     */
+    function foto_medicion($datos){
+        // Si se actualiza
+        if($this->db->insert('mediciones_fotos', $datos)){
+            //Retorna verdadero
+            return true;
+        } // if
+    } // foto_medicion
 }
 /* Fin del archivo Subir_model.php */
 /* Ubicación: ./application/models/Subir_model.php */
