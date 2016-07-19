@@ -37,6 +37,65 @@ Class Obras extends CI_Controller {
         // $this->data['permisos'] = $this->session->userdata('Permisos');
     } // construct
 
+    /**
+     * Actualización de registros en base de datos
+     */
+    function actualizar(){
+        //Se valida que la peticion venga mediante ajax y no mediante el navegador
+        if($this->input->is_ajax_request()){
+            // Se reciben los datos por POST
+            $datos = $this->input->post('datos');
+            $id = $this->input->post('id');
+            $tipo = $this->input->post('tipo');
+
+            // Dependiendo del tipo
+            switch ($tipo) {
+                // Medición
+                case 'medicion':
+                    // Se ejecuta el modelo
+                    echo $this->Obras_model->actualizar($tipo, $id, $datos);
+
+                    // Se inserta el registro en auditoria enviando  tipo de auditoria y id correspondiente
+                    // $this->configuracion_model->insertar_log(24, "{$datos['Nombre']} ({$id})");
+                break; // Medición
+            } // switch tipo
+        }else{
+            //Si la peticion fue hecha mediante navegador, se redirecciona a la pagina de inicio
+            redirect('');
+        } // if
+    } // actualizar
+
+    /**
+     * Carga de datos
+     * @return void 
+     */
+    function cargar()
+    {
+        //Se valida que la peticion venga mediante ajax y no mediante el navegador
+        if($this->input->is_ajax_request()){
+            // Se reciben los datos por POST
+            $tipo = $this->input->post('tipo');
+
+            // Dependiendo del tipo
+            switch ($tipo) {
+                // Obra en la que se iniciará la medición
+                case 'obra_inicial_medicion':
+                    //Se ejecuta el modelo que carga los datos
+                    print json_encode($this->Obras_model->cargar($tipo, $this->input->post('datos')));
+                break; // Obra en la que se iniciará la medición
+
+                // Todos los id de las obras
+                case 'obras_id':
+                    //Se ejecuta el modelo que carga los datos
+                    print json_encode($this->Obras_model->cargar($tipo, NULL));
+                break; // Todos los id de las obras
+            } // switch tipo
+        }else{
+            //Si la peticion fue hecha mediante navegador, se redirecciona a la pagina de inicio
+            redirect('');
+        } // if
+    } // cargar
+
 	/**
      * Carga la interfaz según el tipo
      * @return void 
@@ -82,14 +141,63 @@ Class Obras extends CI_Controller {
                     // Se carga la vista
                     $this->load->view('obras/medir/index');
                 break; // Medición de obras
-
-                // Datos generales de la obra
-                case 'medir_datos_generales':
+                
+                // Confirmación de datos
+                case 'medir_obra_confirmacion':
                     // Se recibe por post la variable que define si es un registro nuevo o existente
-                    // $this->data["id"] = $this->input->post("id");
+                    $this->data["id"] = $this->input->post("id");
 
                     // Se carga la vista
-                    // $this->load->view('obras/medir/datos_generales', $this->data);
+                    $this->load->view('obras/medir/obra_confirmacion', $this->data);
+                break; // Confirmación de datos
+
+                // Descole de la obra
+                case 'medir_obra_descole':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_descole', $this->data);
+                break; // Descole de la obra
+
+                // Fotos del descole de la obra
+                case 'medir_obra_descole_fotos':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+                    $this->data["tipo_medicion"] = $this->input->post("tipo_medicion");
+                    $this->data["numero"] = $this->input->post("numero");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_fotos', $this->data);
+                break; // Fotos del descole de la obra
+
+                // Encole de la obra
+                case 'medir_obra_encole':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_encole', $this->data);
+                break; // Encole de la obra
+
+                // Fotos del encole generales de la obra
+                case 'medir_obra_encole_fotos':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+                    $this->data["tipo_medicion"] = $this->input->post("tipo_medicion");
+                    $this->data["numero"] = $this->input->post("numero");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_fotos', $this->data);
+                break; // Fotos del encole de la obra
+
+                // Datos generales de la obra
+                case 'medir_obra_inicial':
+                    // Se recibe por post la variable que define si es un registro nuevo o existente
+                    $this->data["id"] = $this->input->post("id");
+
+                    // Se carga la vista
+                    $this->load->view('obras/medir/obra_inicial', $this->data);
                 break; // Datos de la obra
 
                 // Unidades de medida aplicables al tipo de obra seleccionado
@@ -108,6 +216,29 @@ Class Obras extends CI_Controller {
     } // cargar_interfaz
 
     /**
+     * Borrado de registros en base de datos
+     */
+    function eliminar(){
+        //Se valida que la peticion venga mediante ajax y no mediante el navegador
+        if($this->input->is_ajax_request()){
+            // Datos por POST
+            $tipo = $this->input->post("tipo");
+
+            // Suiche
+            switch ($tipo) {
+                // Valores de medida de una obra
+                case "valores":
+                    // Se ejecuta el modelo
+                    echo $this->Obras_model->eliminar($tipo, $this->input->post("id_obra"));
+                break; // Valores de medida de una obra
+            } // switch
+        }else{
+            //Si la peticion fue hecha mediante navegador, se redirecciona a la pagina de inicio
+            redirect('');
+        }
+    } // eliminar
+
+    /**
      * Proceso de registro de base de datos
      * @return boolean 
      */
@@ -121,6 +252,21 @@ Class Obras extends CI_Controller {
 
             // Dependiendo del tipo
             switch ($tipo) {
+                // Medición
+                case 'medicion':
+                    // Inserción
+                    $guardar = $this->Obras_model->insertar($tipo, $datos);
+
+                    // Si se guarda correctamente
+                    if ($guardar > 0) {
+                        // Se inserta el registro en auditoria enviando  tipo de auditoria y id correspondiente
+                        // $this->configuracion_model->insertar_log(6, "{$datos['Nombres']} {$datos['Apellidos']} ($guardar)");
+
+                        // Se retorna verdadero
+                        echo $guardar;
+                    } // if
+                break; // Medición
+
                 // Obra
                 case 'obra':
                     // Inserción
@@ -135,6 +281,21 @@ Class Obras extends CI_Controller {
                         echo $guardar;
                     } // if
                 break; // Obra
+
+                // Valores de medida de una obra
+                case 'valores':
+                    // Inserción
+                    $guardar = $this->Obras_model->insertar($tipo, $datos);
+
+                    // Si se guarda correctamente
+                    if ($guardar > 0) {
+                        // Se inserta el registro en auditoria enviando  tipo de auditoria y id correspondiente
+                        // $this->configuracion_model->insertar_log(6, "{$datos['Nombres']} {$datos['Apellidos']} ($guardar)");
+
+                        // Se retorna verdadero
+                        echo $guardar;
+                    } // if
+                break; // Valores de medida de una obra
             } // switch tipo
         }else{
             //Si la peticion fue hecha mediante navegador, se redirecciona a la pagina de inicio

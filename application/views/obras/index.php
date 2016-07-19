@@ -3,45 +3,6 @@
 
 <script type="text/javascript">
 	/**
-	 * Función que carga los lados de una calzada
-	 * @return void 
-	 */
-	function cargar_lados()
-	{
-		//Se resetea el select
-		$("#select_lados").html('');
-
-		// Si se selecciona un valor
-	    if($("#select_calzada").val() !== ""){
-	    	// Se consultan los lados de la calzada
-	    	lados = ajax("<?php echo site_url('configuracion/cargar'); ?> ", {"tipo": "lados", "id": $("#select_calzada").val()}, "JSON");
-
-	   		// Se rellena el select
-			rellenar_select("select_lados", lados);
-	    } // if
-	} // cargar_lados
-
-	/**
-	 * Función que carga los puntos de referencia
-	 * de una unidad funcional
-	 * @return void 
-	 */
-	function cargar_puntos_referencia()
-	{
-		//Se resetea el select
-		$("#select_punto_referencia").html('');
-
-		// Si se selecciona un valor
-	    if($("#select_unidad_funcional").val() !== ""){
-	    	// Se consultan los puntos de referencia de la unidad funcional
-	    	puntos_referencia = ajax("<?php echo site_url('configuracion/cargar'); ?> ", {"tipo": "puntos_referencia", "id": $("#select_unidad_funcional").val()}, "JSON");
-
-	   		// Se rellena el select
-			rellenar_select("select_punto_referencia", puntos_referencia);
-	    } // if
-	} // cargar_puntos_referencia
-
-	/**
 	 * Función que se activa al presionar el botón crear del menú
 	 * @return void 
 	 */
@@ -128,6 +89,11 @@
 			return false;
         } // if
 
+        // Se consulta la obra, para verificar si existe otra en el mismo abscisado y el mismo lado
+
+
+       
+
         // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
         mostrar_mensaje_pie([
         	"carga", 
@@ -145,15 +111,15 @@
     		"Fk_Id_Obra_Tipo": tipo_obra.val(),
     		"Fk_Id_Punto_Referencia": punto_referencia.val(),
     	};
-    	imprimir(datos);
+    	// imprimir(datos);
 
     	// Si trae id (registro a actualizar)
     	if (id_obra) {
-    		imprimir("Actualizando...")
+    		imprimir("Actualizando...");
     		// Se procede a modificar
     		// exito = ajax("<?php echo site_url('obras/actualizar'); ?>", {"tipo": "usuario", "datos": datos, "id": id_usuario}, "HTML");
     	} else {
-    		imprimir("Creando...")
+    		imprimir("Creando...");
     		// Se guarda los datos en la base de datos
     		exito = ajax("<?php echo site_url('obras/insertar'); ?>", {"tipo": "obra", "datos": datos}, "HTML");
     	} // if
@@ -178,14 +144,24 @@
 	    	return false;
     	} //if
 
-    	// Se consulta el tipo de obra
+    	// Se eliminan los valores de la obra anteriores
+    	ajax("<?php echo site_url('obras/eliminar'); ?>", {"tipo": "valores", "id_obra": exito.respuesta}, "HTML");
     	
-    	// Se guardan las medidas de esa obra
-    	
 
+    	// Se recorren los inputs
+    	$('input[id^="input_numero_valor"]').each(function() {
+    		// Arreglo de datos a guardar
+    		var datos = {
+    			"Fk_Id_Unidad_Medida": $(this).attr("data-unidad-medida"),
+    			"Fk_Id_Obra": exito.respuesta,
+    			"Valor": $(this).val()
+    		}
+    		// imprimir(datos);
 
-
-
+			// Se guarda el valor
+			valor = ajax("<?php echo site_url('obras/insertar'); ?>", {"tipo": "valores", "datos": datos}, "HTML");
+			imprimir(valor);
+    	}); // each
 
     	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
         mostrar_mensaje_pie([
@@ -196,7 +172,6 @@
 
     	// Se redirecciona al formulario de subida de foto
     	subir_foto(exito.respuesta);
-
 
     	// Se redirecciona a la lista de unidades funcionales
     	// listar("La obra fue creada correctamente");

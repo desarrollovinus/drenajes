@@ -135,6 +135,11 @@ function botones(parametros)
 	var listar = $("#icono_listar");
 	var pdf = $("#icono_pdf");
 	var volver = $("#icono_volver");
+	var medir = $("#icono_medir");
+	var anterior = $("#icono_anterior");
+	var siguiente = $("#icono_siguiente");
+	var continuar_medicion = $("#icono_continuar_medicion");
+	var anterior_medicion = $("#icono_anterior_medicion");
 
 	// Se ocultan todos los íconos por defecto
 	crear.hide();
@@ -145,6 +150,11 @@ function botones(parametros)
 	listar.hide();
 	pdf.hide();
 	volver.hide();
+	medir.hide();
+	anterior.hide();
+	siguiente.hide();
+	continuar_medicion.hide();
+	anterior_medicion.hide();
 
 	// Si trae alguna Configuración
 	if (parametros) {
@@ -188,6 +198,31 @@ function botones(parametros)
 			volver.show(); 
 			volver.popup({inline: true});
 		};
+
+		if (parametros.medir) { 
+			medir.show(); 
+			medir.popup({inline: true});
+		};
+
+		if (parametros.anterior) { 
+			anterior.show(); 
+			anterior.popup({inline: true});
+		};
+
+		if (parametros.siguiente) { 
+			siguiente.show(); 
+			siguiente.popup({inline: true});
+		};
+
+		if (parametros.continuar_medicion) { 
+			continuar_medicion.show(); 
+			continuar_medicion.popup({inline: true});
+		};
+
+		if (parametros.anterior_medicion) { 
+			anterior_medicion.show(); 
+			anterior_medicion.popup({inline: true});
+		};
 	} // if
 } // botones
 
@@ -200,6 +235,9 @@ function botones(parametros)
  */
 function cargar_interfaz(contenedor, url, datos)
 {
+
+
+
 	// Configuración de los botones (de esta manera entran desactivados)
 	botones();
 
@@ -208,7 +246,47 @@ function cargar_interfaz(contenedor, url, datos)
 
 	// Carga de la interfaz
 	$("#" + contenedor).hide().load(url, datos).fadeIn('500');
+	// $("#" + contenedor).load(url, datos).animate({ marginLeft: "100%"} , 4000);
 } // cargar_interfaz
+
+/**
+ * Función que carga los lados de una calzada
+ * @return void 
+ */
+function cargar_lados()
+{
+	//Se resetea el select
+	$("#select_lados").html('');
+
+	// Si se selecciona un valor
+    if($("#select_calzada").val() !== ""){
+    	// Se consultan los lados de la calzada
+    	lados = ajax($("#url_configuracion_cargar").val(), {"tipo": "lados", "id": $("#select_calzada").val()}, "JSON");
+
+   		// Se rellena el select
+		rellenar_select("select_lados", lados);
+    } // if
+} // cargar_lados
+
+/**
+ * Función que carga los puntos de referencia
+ * de una unidad funcional
+ * @return void 
+ */
+function cargar_puntos_referencia()
+{
+	//Se resetea el select
+	$("#select_punto_referencia").html('');
+
+	// Si se selecciona un valor
+    if($("#select_unidad_funcional").val() !== ""){
+    	// Se consultan los puntos de referencia de la unidad funcional
+    	puntos_referencia = ajax($("#url_configuracion_cargar").val(), {"tipo": "puntos_referencia", "id": $("#select_unidad_funcional").val()}, "JSON");
+
+   		// Se rellena el select
+		rellenar_select("select_punto_referencia", puntos_referencia);
+    } // if
+} // cargar_puntos_referencia
 
 /**
  * Esta función cuenta los checks para saber cuáles imprimirá

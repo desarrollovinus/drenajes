@@ -12,6 +12,12 @@
 		del pié de página, para después poder removerlo y que se deje poner el otro -->
         <input type="hidden" id="icono_pie" value="vacío">
 
+        <!-- Inputs ocultos que almacenan la url site y base para usarla en funciones javascript -->
+        <input id="url_configuracion_cargar" type="hidden" value="<?php echo site_url('configuracion/cargar') ?>">
+
+        <!-- Input oculto con el id de la medición de ua obra. Se ubica aquí para que pueda ser leído por todas las interfaces -->
+		<input type="hidden" id="id_medicion" >
+
 		<!-- Modal Mensaje -->
 		<div id="modal_mensaje" class="ui basic small test modal">
 			<i class="close icon"></i>
@@ -105,8 +111,6 @@
         <script src="<?php echo base_url(); ?>js/plugins/bootstrap.min.js"></script>
 		<script src="<?php echo base_url(); ?>semantic/dist/semantic.min.js"></script>
         <script src="<?php echo base_url(); ?>js/funciones.js"></script>
-
-        
 
         <footer>
 			<!-- Carga de pié de página -->

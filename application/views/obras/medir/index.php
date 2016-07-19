@@ -4,37 +4,18 @@
 		Seleccione una obra como punto de inicio
 	</h2>
 
-
-	<div class="four fields">
-		<!-- Unidad funcional -->
-		<div class="field">
-			<label for="select_unidad_funcional">Unidad Funcional *</label>
-			<select id="select_unidad_funcional" class="ui fluid search dropdown">
-				<!-- Option vacío -->
-				<option value="">Obligatorio</option>
-
-				<!-- Recorrido de las unidades funcionales activas -->
-				<?php foreach ($this->Configuracion_model->cargar("unidades_funcionales_activas", NULL) as $unidad_funcional) { ?>
-					<option value="<?php echo $unidad_funcional->Pk_Id; ?>"><?php echo $unidad_funcional->Codigo . " - " . $unidad_funcional->Nombre; ?></option>
-				<?php } // foreach ?>
-			</select>
-		</div>
-
-		<!-- Punto de referencia -->
-		<div class="field">
-			<label for="select_punto_referencia">Punto de referencia *</label>
-			<select id="select_punto_referencia" class="ui fluid search dropdown">
-				<!-- Option vacío -->
-				<option value="">Obligatorio</option>
-			</select>
-		</div>
-
+	<div class="two fields">
 		<!-- Abscisa inicial -->
 		<div class="field">
-			<label for="select_abscisa inicial">Abscisa inicial *</label>
-			<select id="select_abscisa inicial" class="ui fluid search dropdown">
+			<label for="select_abscisa_inicial">Abscisa inicial (ms)*</label>
+			<select id="select_abscisa_inicial" class="ui fluid search dropdown">
 				<!-- Option vacío -->
 				<option value="">Obligatorio</option>
+
+				<!-- Recorrido de las abscisas iniciales de las obras -->
+				<?php foreach ($this->Obras_model->cargar("abscisas_iniciales_obras", NULL) as $abscisa) { ?>
+					<option value="<?php echo $abscisa->Abscisa_Inicial; ?>"><?php echo $abscisa->Abscisa_Inicial; ?></option>
+				<?php } // foreach ?>
 			</select>
 		</div>
 
@@ -44,11 +25,18 @@
 			<select id="select_lado" class="ui fluid search dropdown">
 				<!-- Option vacío -->
 				<option value="">Obligatorio</option>
+
+				<!-- Recorrido de los lados -->
+				<?php foreach ($this->Configuracion_model->cargar("lados", NULL) as $lado) { ?>
+					<option value="<?php echo $lado->Pk_Id; ?>" data-codigo-lado="<?php echo $lado->Codigo; ?>"><?php echo $lado->Nombre; ?></option>
+				<?php } // foreach ?>
 			</select>
 		</div>
 	</div>
 </form>
 <!-- Formulario -->
+
+<div class="ui divider"></div>
 
 <!-- Contenedor -->
 <div id="cont_medir"></div><!-- Contenedor -->
@@ -85,39 +73,173 @@
 
 	} // eliminar
 
+	function medir_obra(tipo, id_medicion = null, numero_foto = null)
+	{
+		// id de la obra
+		var id_obra = $("#id_obra").val();
+
+		switch(tipo) {
+			case "confirmacion":
+		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Cargando todos los datos que van a ser almacenados...", 
+		        	"Cargando datos para previa revisión"
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": id_obra});
+	        break;
+
+			case "descole":
+		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Descole de la obra", 
+		        	"Cargando información del descole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val()});
+	        break;
+
+	        case "descole_fotos":
+	        	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Fotos del descole de la obra", 
+		        	"Cargando información de las fotografías del descole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val(), "tipo_medicion": "descole", "numero": numero_foto});
+	        break;
+
+	        // Encole
+		    case "encole":
+		        // Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Encole de la obra", 
+		        	"Cargando información del encole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val()});
+	        break; // Encole
+
+	        // Fotos del encole
+	        case "encole_fotos":
+	        	// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Fotos del encole de la obra", 
+		        	"Cargando información de las fotografías del encole de la obra."
+		    	]);
+
+		        // Carga de interfaz
+				cargar_interfaz("cont_principal", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_" + tipo, "id": $("#id_medicion").val(), "tipo_medicion": "encole", "numero": numero_foto});
+	        break; // Fotos del encole
+		} // suiche
+	}
+
 	/**
 	 * Gestiona el registro del formulario vía ajax
 	 */
 	function guardar()
 	{
-
+		regresar();
 	} // guardar
 
 	/**
-	 * Lista las normas
+	 * Función que elige la siguiente obra y la carga
+	 * @param  {string} sentido Derecha o izquierda (ascendente o descendiente)
 	 */
-	function listar(mensaje = null)
+	function siguiente(sentido)
+	{
+		// Id de la obra
+		var id_obra = $("#id_obra").val();
+
+		// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+        mostrar_mensaje_pie([
+        	"carga", 
+        	"Cargando siguiente obra...", 
+        	"Generando los datos de la siguente obra a la " + sentido + "."
+    	]);
+
+    	// Se consultan los id de las obras 
+    	obras = ajax("<?php echo site_url('obras/cargar'); ?>", {"tipo": "obras_id"}, "JSON");
+
+    	// Arreglo de las obras
+    	var obras = obras.respuesta;
+    	var id_obra_siguiente, id_obra_anterior;
+
+		// Se recorre el arreglo
+		for (var i = 0; i < obras.length; i++) {
+			// Si el valor de la posición es el valor buscado
+		    if (obras[i].Pk_Id === id_obra) {
+		    	// Si el sentido es a la derecha
+		    	if (sentido == "derecha") {
+		    		// Se sube una posición
+		    		var aumento = i + 1;
+		    	} else {
+		    		// Se baja una posición
+		    		var aumento = i - 1;
+		    	} // if
+
+		    	/**
+		    	 * 
+		    	 * 
+		    	 * 
+		    	 */
+		    	if (i < 1) {
+		    		// 
+		    		id_obra_anterior = null;
+		    	}else{
+		    		// 
+		      		id_obra_siguiente = obras[aumento].Pk_Id;
+		    	} // if
+		    } // if
+	  	} // for
+  		
+  	// 	// Si se llega al último registro
+   //  	if(aumento == obras.length-1){
+   //  		imprimir("ultimo")
+		 //    		id_obra_siguiente = null;
+
+    		
+   //  	} // if
+
+   //  	if (!id_obra_siguiente || !id_obra_anterior) {
+   //  		// Se muestra el modal, enviando título, descripción y nombre de la clase del ícono a usar
+			// modal([
+			// 	"Fin del recorrido", 
+			// 	"El recorrido ha finalizado. No hay más obras a la " + sentido, 
+			// 	"announcement"
+			// ]);
+
+			// return false;
+   //  	} // if
+
+	  	// Se carga la interfaz de obra inicial
+	  	obra_inicial(id_obra_siguiente);
+	} // siguiente
+
+	/**
+	 * Interfaz de obra inicial
+	 */
+	function obra_inicial(id_obra, mensaje = null)
 	{
 		// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
         mostrar_mensaje_pie([
         	"carga", 
-        	"Cargando información preliminar...", 
-        	"Listando los datos para la medición"
+        	"Cargando la obra inicial...", 
+        	"Cargando datos de la obra."
     	]);
 
-        // Si trae un mensaje
-    	// if (mensaje) {
-    		// Se muestra el modal, enviando título, descripción y nombre de la clase del ícono a usar
-			// modal([
-			// 	"Obra guardada", 
-			// 	mensaje, 
-			// 	"checkmark circle"
-			// ]);
-    	// };
-
     	// Carga de interfaz
-		// cargar_interfaz("cont_medir", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir"});
-	} // listar
+		cargar_interfaz("cont_medir", "<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir_obra_inicial", "id": id_obra});
+	} // obra_inicial
 
 	/**
 	 * Vuelve al anterior formulario
@@ -125,23 +247,62 @@
 	function volver()
 	{
 		// Carga de interfaz
-		// cargar_interfaz("cont_normas", "<?php // echo site_url('indicadores_configuracion/cargar_interfaz'); ?>", {"tipo": "index"});
+        cargar_interfaz("cont_principal","<?php echo site_url('obras/cargar_interfaz'); ?>", {"tipo": "medir"});
 	} // volver
 
 	// Cuando el DOM esté listo
 	$(document).ready(function(){
+		// Se activan los botones
+        botones({"volver": true});
+
 		// Activación de los selects
         $('select[id^="select_"]').dropdown({
 			allowAdditions: true
 		}); // dropdown
 
-		// Al elegir una unidad funcional
-		$("#select_unidad_funcional").on("change", function(){
-			// Se cargan los puntos de referencia
-			cargar_puntos_referencia();
-		}); // change unidad_funcional
+		// Cuando se cambie algún select
+        $('select[id^="select_"]').on("change", function () {
+        	// Datos para consulta
+    		var datos = {
+    			"Abscisa_Inicial": $("#select_abscisa_inicial").val(),
+    			"Codigo": $("#select_lado option:selected").attr("data-codigo-lado")
+    		}
+    		// imprimir(datos);
+    		
+    		// Si todos los campos tienen datos
+    		if ($("#select_abscisa_inicial").val() !== "" && $("#select_lado").val() !== "") {
+    			// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+		        mostrar_mensaje_pie([
+		        	"carga", 
+		        	"Buscando obra...", 
+		        	"Buscando la obra que coincida con los datos elegidos."
+		    	]);
 
-		// Por defecto, cargamos la interfaz de la tabla
-		listar();
+    			// Se consulta la obra que corresponda a ese lado y abscisa inicial
+	        	obra = ajax("<?php echo site_url('obras/cargar'); ?>", {"tipo": "obra_inicial_medicion", "datos": datos}, "JSON");
+
+	        	// Si se encontró la obra
+	    		if (obra.respuesta) {
+	    			// Se carga la interfaz con la respuesta, sea vacía o el arreglo
+    				obra_inicial(obra.respuesta.Pk_Id);
+	    		}else{
+	    			// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+			    	mostrar_mensaje_pie([
+			    		"estado", 
+			    		"No se encontró la obra", 
+			    		"Por favor verifique los datos e intente nuevamente.",
+			    		"bug"
+					]);
+	    		} // if
+    		} // if
+		}); // change
+
+		// Se muestra el mensaje al pié, enviando el tipo, el título y la descripción
+    	mostrar_mensaje_pie([
+    		"estado", 
+    		"Opciones preliminares cargadas", 
+    		"Elija la obra como punto de inicio para comenzar las mediciones.",
+    		"announcement"
+		]);
 	}); // document.ready
 </script>

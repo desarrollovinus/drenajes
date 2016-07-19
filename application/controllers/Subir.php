@@ -41,6 +41,78 @@ Class Subir extends CI_Controller {
     var $ruta = './archivos/';
 
     /**
+     * Foto de una medición
+     */
+    function foto_medicion(){
+        // Se toman los datos por POST
+        $id_medicion = $this->uri->segment(3);
+        $tipo_medicion = $this->uri->segment(4);
+        $numero_foto = $this->uri->segment(5);
+
+        // Id del tipo de medición
+        ($tipo_medicion == "encole") ? $id_tipo = 1 : $id_tipo = 2 ;
+
+        // Se establece el directorio
+        $directorio = "{$this->ruta}mediciones/{$tipo_medicion}s/{$id_medicion}/";
+
+        // Arreglo con datos de consulta e inserción
+        $datos = array("Fk_Id_Medicion" => $id_medicion, "Fk_Id_Foto_Tipo" => $id_tipo, "Numero" => $numero_foto);
+
+        // Se consulta los datos de la medición
+        $medicion_foto = $this->Obras_model->cargar("medicion_foto", $datos);
+
+        // Si tiene foto la medición, se almacena la variable
+        (count($medicion_foto) > 0) ? $foto_anterior = $medicion_foto->Nombre_Archivo : $foto_anterior = null ;
+
+        //Valida que el directorio exista. Si no existe,lo crea con el id obtenido
+        if( ! is_dir($directorio)){
+            //Asigna los permisos correspondientes
+            @mkdir($directorio, 0777);
+        }//Fin if
+
+        // Variables de éxito 
+        $exito_archivo = false;
+        $exito_registro = false;
+
+        //Declaramos una variable mensaje que almacenara el resultado de las operaciones.
+        $mensaje = "";
+
+        // Recorrido de los archivos
+        foreach ($_FILES as $key){
+            // Si el archivo se pasa correctamente
+            if($key['error'] == UPLOAD_ERR_OK ){
+                //Obtenemos el nombre original del archivo
+                $nombre = $key['name'];
+
+                // Si el fichero existe
+                if (file_exists($directorio.$nombre)) {
+                    echo "existe";
+                } else  if (move_uploaded_file($key['tmp_name'], $directorio.$nombre)) {
+                    //La subida es ok
+                    $exito_archivo = true;
+
+                    // Al arreglo se le adiciona el nombre de la foto
+                    $datos["Nombre_Archivo"] = $nombre;
+
+                    //Si se guarda en base de datos correctamente
+                    if( $this->Subir_model->foto_medicion($datos) ){
+                        // Si había una foto antes
+                        if ($foto_anterior) {
+                            // Se borra el registro anterior
+                            echo $this->Obras_model->eliminar("medicion_foto", $medicion_foto->Pk_Id);
+
+                            // Se borra el archivo anterior
+                            unlink($directorio.$foto_anterior);
+                         } // if
+
+                         echo true;
+                    } // if
+                } // if
+            } // if
+        } // foreach
+    } // foto_medicion
+
+    /**
      * Foto de una obra
      */
     function foto_obra(){
