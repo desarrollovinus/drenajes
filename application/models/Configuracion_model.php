@@ -156,6 +156,18 @@ Class Configuracion_model extends CI_Model{
 		        return $this->db_sicc->get('puntos_referencia')->result();
 			break; // Puntos de referencia
 
+			// Segmentos dentro de un rango, para el reporte rectigráfico
+			case "segmentos_reporte":
+				// Consulta
+				$this->db_sicc->select('*');
+				$this->db_sicc->where("Numero BETWEEN {$id['Segmento_Inicial']} AND {$id['Segmento_Final']}");
+				$this->db_sicc->where("Fk_Id_Unidad_Funcional", $id['Unidad_Funcional']);
+				$this->db_sicc->order_by('Pk_Id');
+
+				// Retorno
+		        return $this->db_sicc->get('unidades_funcionales_segmentos')->result();
+			break; // Segmentos dentro de un rango, para el reporte rectigráfico
+
 			// Unidades funcionales
 			case "unidades_funcionales_activas":
 				// Consulta
@@ -166,6 +178,16 @@ Class Configuracion_model extends CI_Model{
 				// Retorno
 		        return $this->db_sicc->get('unidades_funcionales')->result();
 			break; // Unidades funcionales
+
+			// Unidad funcional
+			case "unidad_funcional":
+				// Consulta
+				$this->db_sicc->select('*');
+				$this->db_sicc->where("Pk_Id", $id);
+
+				// Retorno
+		        return $this->db_sicc->get('unidades_funcionales')->row();
+			break; // Unidad funcional
 		} // switch
 	} // cargar
 }

@@ -109,13 +109,15 @@ Class Obras_model extends CI_Model{
 					uf.Codigo AS Unidad_Funcional_Codigo,
 					ot.Nombre AS Tipo,
 					pr.Nombre AS Punto_Referencia,
-					l.Nombre AS Lado
+					l.Nombre AS Lado,
+					c.Nombre AS Calzada
 				FROM
 					drenajes.obras AS o
 				LEFT JOIN sicc.puntos_referencia AS pr ON o.Fk_Id_Punto_Referencia = pr.Pk_Id
 				LEFT JOIN sicc.unidades_funcionales AS uf ON pr.Fk_Id_Unidad_Funcional = uf.Pk_Id
 				LEFT JOIN drenajes.obras_tipos AS ot ON o.Fk_Id_Obra_Tipo = ot.Pk_Id
 				LEFT JOIN drenajes.lados AS l ON o.Fk_Id_Lado = l.Pk_Id
+				LEFT JOIN drenajes.calzadas AS c ON l.Fk_Id_Calzada = c.Pk_Id
 				$condicion
 				ORDER BY
 					Unidad_Funcional_Codigo ASC,
@@ -159,6 +161,40 @@ Class Obras_model extends CI_Model{
             break; // Obra en la que se iniciará la medición
 		} // switch
 	} // cargar
+
+	/**
+	 * Permite el conteo de registros
+	 * @param  string $tipo Tipo
+	 * @param  array $parametros   Parámetros para el conteo
+	 * @return int      cantidad obtenida
+	 */
+	function contar($tipo, $parametros)
+	{
+		// Dependiendo del tipo
+    	switch ($tipo) {
+			// Obras en un rango de abscisas
+			case "obras":
+				// $sql =
+				// "SELECT
+				// 	o.Pk_Id
+				// FROM
+				// 	obras AS o
+				// 	INNER JOIN sicc.puntos_referencia AS pr ON o.Fk_Id_Punto_Referencia = pr.Pk_Id
+				// WHERE
+				// 	pr.Fk_Id_Unidad_Funcional = {$parametros['Id_Unidad_Funcional']}
+				// 	AND o.Abscisa_Inicial BETWEEN {$parametros['Abscisado1']}
+				// AND {$parametros['Abscisado2']}";
+				
+				// $obra = $this->db->query($sql)->row();
+
+				// if (count($obra) > 0) {
+				// 	return $obra;
+				// }
+
+				// return null;
+			break; // Obras en un rango de abscisas
+		} // switch
+	} // contar
 
 	/**
      * Borrado de registros en base de datos
